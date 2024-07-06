@@ -3,7 +3,7 @@ import torch
 import utils
 import torchvision
 
-def train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimizer, data_loader, device, epoch, args, model_ema=None, scaler=None):
+def train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimizer, pol_optimizer, data_loader, device, epoch, args, model_ema=None, scaler=None):
     model.train()
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value}"))
@@ -31,14 +31,17 @@ def train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimiz
             loss = torch.mean(torch.log(torch.sum(logp.exp(), 1)) * criterion(output, target))
 
         optimizer.zero_grad()
+        pol_optimizer.zero_grad()
         if scaler is not None:
             scaler.scale(loss).backward()
             if args.clip_grad_norm is not None:
                 # we should unscale the gradients of optimizer's assigned params if do gradient clipping
                 scaler.unscale_(optimizer)
+                scaler.unscale_(pol_optimizer)
                 nn.utils.clip_grad_norm_(model.parameters(), args.clip_grad_norm)
                 nn.utils.clip_grad_norm_(policy_net.parameters(), args.clip_grad_norm)
             scaler.step(optimizer)
+            scaler.step(pol_optimizer)
             scaler.update()
         else:
             loss.backward()
@@ -46,6 +49,7 @@ def train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimiz
                 nn.utils.clip_grad_norm_(model.parameters(), args.clip_grad_norm)
                 nn.utils.clip_grad_norm_(policy_net.parameters(), args.clip_grad_norm)
             optimizer.step()
+            pol_optimizer.step()
             
         base_alpha, base_beta = base_alpha.detach(), base_beta.detach()
 

@@ -45,7 +45,7 @@ def main(args):
 
     print("Creating model")
     model, policy_net = create_model(args, device)
-    criterion, optimizer, main_lr_scheduler = get_optim(model, policy_net, args)
+    criterion, optimizer, pol_optimizer, main_lr_scheduler, pol_lr_scheduler = get_optim(model, policy_net, args)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -64,12 +64,14 @@ def main(args):
 
     if args.resume:
         checkpoint = torch.load(args.resume, map_location="cpu", weights_only=False)
-        model.load_state_dict(checkpoint["model"])   
-        policy_net.load_state_dict(checkpoint["policy_net"])
+        model_without_ddp.load_state_dict(checkpoint["model"])   
+        policy_net_without_ddp.load_state_dict(checkpoint["policy_net"])
         base_alpha = checkpoint["base_alpha"]
         base_beta = checkpoint["base_beta"]
         optimizer.load_state_dict(checkpoint["optimizer"])
+        pol_optimizer.load_state_dict(checkpoint["pol_optimizer"])
         main_lr_scheduler.load_state_dict(checkpoint["main_lr_scheduler"])
+        pol_lr_scheduler.load_state_dict(checkpoint["pol_lr_scheduler"])
         args.start_epoch = checkpoint["epoch"] + 1
         if scaler:
             scaler.load_state_dict(checkpoint["scaler"])
@@ -89,21 +91,24 @@ def main(args):
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
-        base_alpha, base_beta = train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimizer, data_loader, device, epoch, args)
+        base_alpha, base_beta = train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimizer, pol_optimizer, data_loader, device, epoch, args)
         main_lr_scheduler.step()
+        pol_lr_scheduler.step()
         evaluate(model, policy_net, base_alpha, base_beta, criterion, data_loader_test, args, device)
         if args.output_dir:
             checkpoint = {
                 "model": model_without_ddp.state_dict(),
                 "policy_net": policy_net_without_ddp.state_dict(),
                 "optimizer": optimizer.state_dict(),
+                "pol_optimizer": pol_optimizer.state_dict(),
                 "main_lr_scheduler": main_lr_scheduler.state_dict(),
+                "pol_lr_scheduler": pol_lr_scheduler.state_dict(),
                 "base_alpha": base_alpha,
                 "base_beta": base_beta,
                 "epoch": epoch,
                 "args": args,
             }
-            utils.save_on_master(checkpoint, os.path.join(args.output_dir, "checkpoint.pth"))
+            utils.save_on_master(checkpoint, os.path.join(args.output_dir, f'checkpoint_{args.model}.pth'))
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))

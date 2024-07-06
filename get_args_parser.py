@@ -55,13 +55,13 @@ def get_args_parser(add_help=True):
         "--lr-warmup-method", default="constant", type=str, help="the warmup method (default: constant)"
     )
     parser.add_argument(
-        "--grid", default=224, type=int, help="the random crop size used for training (default: 224)"
+        "--grid", default=64, type=int, help="the random crop size used for training (default: 64)"
     )
     parser.add_argument(
-        "--kernel", default=13, type=int, help="the random crop size used for training (default: 224)"
+        "--kernel", default=13, type=int, help="the random crop size used for training (default: 13)"
     )
     parser.add_argument(
-        "--sigma", default=6, type=int, help="the random crop size used for training (default: 224)"
+        "--sigma", default=6, type=int, help="the random crop size used for training (default: 6)"
     )        
     parser.add_argument("--lr-warmup-decay", default=0.01, type=float, help="the decay for lr")
     parser.add_argument("--lr-step-size", default=30, type=int, help="decrease lr every step-size epochs")
