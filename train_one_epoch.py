@@ -5,6 +5,7 @@ import torchvision
 
 def train_one_epoch(model, policy_net, base_alpha, base_beta, criterion, optimizer, pol_optimizer, data_loader, device, epoch, args, model_ema=None, scaler=None):
     model.train()
+    policy_net.train()    
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter("lr", utils.SmoothedValue(window_size=1, fmt="{value}"))
     metric_logger.add_meter("img/s", utils.SmoothedValue(window_size=10, fmt="{value}"))
