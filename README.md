@@ -3,6 +3,8 @@
 This repository contains the official implementation of the "Policy Gradient-Driven Noise Mask" research article. The code is based on modifications to the PyTorch vision classification reference scripts.
 `https://github.com/pytorch/vision/tree/main/references/classification`
 
+If you use this code in your research, please cite our paper:
+
 ```
 @article{yavuz2024policy,
   title={Policy Gradient-Driven Noise Mask},
