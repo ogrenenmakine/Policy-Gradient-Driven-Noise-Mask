@@ -19,7 +19,6 @@ def get_optim(model, policy_net, args):
             weight_decay=args.weight_decay,
             nesterov="nesterov" in opt_name,
         )         
-        pol_optimizer = torch.optim.AdamW(policy_net.parameters(), lr=args.lr * 0.01)
         
     if args.lr_scheduler == "steplr":
         main_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
