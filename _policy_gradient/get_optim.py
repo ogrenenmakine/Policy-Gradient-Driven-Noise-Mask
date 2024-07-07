@@ -16,7 +16,7 @@ def get_optim(model, policy_net, args):
         
     if args.lr_scheduler == "steplr":
         main_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
-        pol_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(pol_optimizer, T_max=args.epochs, eta_min=args.lr * 0.0001)
+        pol_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(pol_optimizer, T_max=args.epochs, eta_min=args.lr_min)
 
     return criterion, optimizer, pol_optimizer, main_lr_scheduler, pol_lr_scheduler
     
