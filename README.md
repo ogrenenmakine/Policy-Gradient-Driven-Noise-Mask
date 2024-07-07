@@ -1,4 +1,6 @@
-# Official Repo for `Policy Gradient-Driven Noise Mask` research article
+### Official Repo for `Policy Gradient-Driven Noise Mask` research article
+
+The code is modified from `https://github.com/pytorch/vision/tree/main/references/classification`
 
 This folder contains reference training scripts. They serve as a log of how to train specific models, as provide baseline
 training and evaluation scripts to quickly bootstrap research.
