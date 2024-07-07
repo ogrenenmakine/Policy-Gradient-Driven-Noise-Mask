@@ -19,6 +19,7 @@ Except otherwise noted, all models have been trained on 8x V100 GPUs with the fo
 
 ### Download Weights
 ```
+cd _weights
 git lfs install
 git clone git@hf.co:ogrenenmakine/Policy-Gradient-Noise-Mask
 ```
