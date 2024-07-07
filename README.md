@@ -17,7 +17,20 @@ Except otherwise noted, all models have been trained on 8x V100 GPUs with the fo
 | `--lr-step-size`         | `30`   |
 | `--lr-gamma`             | `0.1`  |
 
-### Trainin with Policy-Gradient Noise Mask
+### Download Weights
 ```
+git lfs install
+git clone git@hf.co:ogrenenmakine/Policy-Gradient-Noise-Mask
+```
+
+### Training with Policy-Gradient Noise Mask
+```
+cd _policy_gradient
 torchrun --nproc_per_node=8 --standalone train.py --data-path ## PATH TO RADIMAGENET --workers 16 --model resnet50 --batch-size 32 --grid 64 --kernel 13 --sigma 6 --sync-bn --output-dir _gradp
+```
+
+### Finetuning the Intermediate Model
+```
+cd _normal
+torchrun --nproc_per_node=4 --standalone train.py --data-path ## PATH TO RADIMAGENET --model resnet540 --epochs 10 --workers 16 --num-classes 165 --batch-size 64 --lr 0.001 --sync-bn --lr-warmup-epochs 7 --lr-warmup-method linear  --finetune ../_weights/resnet10t_gradientp_RIN_64_64_k13_s6.pth --output-dir .
 ```
