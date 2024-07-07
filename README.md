@@ -1,4 +1,4 @@
-### Official Repo for `Policy Gradient-Driven Noise Mask` research article
+## Official Repo for `Policy Gradient-Driven Noise Mask` research article
 
 The code is modified from `https://github.com/pytorch/vision/tree/main/references/classification`
 
