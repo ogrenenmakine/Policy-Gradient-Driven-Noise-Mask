@@ -10,8 +10,8 @@ If you use this code in your research, please cite our paper:
 ```
 @article{yavuz2024policy,
   title={Policy Gradient-Driven Noise Mask},
-  author={Yavuz, Mehmet Can},
-  journal={arXiv preprint arXiv:2406.14568},
+  author={Yavuz, Mehmet Can and Yang, Yang},
+  eprint = {arXiv:2406.14568},
   year={2024},
   eprint={2406.14568},
   archivePrefix={arXiv},
