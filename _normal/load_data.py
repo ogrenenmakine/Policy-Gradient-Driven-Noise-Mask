@@ -50,12 +50,6 @@ def load_data(args):
             use_v2=args.use_v2,
         ),
     )
-    
-    for i, (path, label) in enumerate(dataset.imgs):
-        if 'positive' in path:
-            dataset.imgs[i] = (path, 1)  # Update label to 1 for positive cases
-        elif 'negative' in path:
-            dataset.imgs[i] = (path, 0)    
 
     print("Took", time.time() - st)
 
@@ -74,12 +68,6 @@ def load_data(args):
         preprocessing,
     )
 
-    for i, (path, label) in enumerate(dataset_test.imgs):
-        if 'positive' in path:
-            dataset.imgs[i] = (path, 1)  # Update label to 1 for positive cases
-        elif 'negative' in path:
-            dataset.imgs[i] = (path, 0)    
-    
     print("Creating data loaders")
     if args.distributed:
         if hasattr(args, "ra_sampler") and args.ra_sampler:
@@ -90,11 +78,10 @@ def load_data(args):
     else:
         train_sampler = torch.utils.data.RandomSampler(dataset)
         test_sampler = torch.utils.data.SequentialSampler(dataset_test)
-
+        
     mixup_cutmix = get_mixup_cutmix(
         mixup_alpha=args.mixup_alpha, cutmix_alpha=args.cutmix_alpha, num_classes=num_classes, use_v2=args.use_v2
     )
-    
     if mixup_cutmix is not None:
         def collate_fn(batch):
             return mixup_cutmix(*default_collate(batch))
