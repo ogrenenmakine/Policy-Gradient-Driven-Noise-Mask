@@ -39,9 +39,7 @@ def main(args):
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
         policy_net = torch.nn.SyncBatchNorm.convert_sync_batchnorm(policy_net)
-
-    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-
+        
     scaler = torch.cuda.amp.GradScaler() if args.amp else None
 
     model_without_ddp = model
