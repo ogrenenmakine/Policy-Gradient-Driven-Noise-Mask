@@ -1,5 +1,5 @@
 ## Official Repo for `Policy Gradient-Driven Noise Mask` research article
-## :zap:	:zap:	Repo moved to [converged-machine](https://github.com/convergedmachine/Policy-Gradient-Driven-Noise-Mask) :zap:	:zap:	
+## :zap:	:zap:	Repo moved to [convergedmachine](https://github.com/convergedmachine/Policy-Gradient-Driven-Noise-Mask) :zap:	:zap:	
 
 This repository contains the official implementation of the "Policy Gradient-Driven Noise Mask" research article. The code is based on modifications to the PyTorch vision classification reference scripts.
 `https://github.com/pytorch/vision/tree/main/references/classification`
