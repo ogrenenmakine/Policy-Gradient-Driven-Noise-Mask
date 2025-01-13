@@ -44,7 +44,7 @@ Experiments conducted on RadImageNet datasets demonstrate that fine-tuning the i
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/ogrenenmakine/Policy-Gradient-Driven-Noise-Mask
+git clone https://github.com/convergedmachine/Policy-Gradient-Driven-Noise-Mask
 cd policy-gradient-noise-mask
 ```
 
@@ -54,7 +54,7 @@ To download the pretrained weights:
 ```bash
 cd _weights
 git lfs install
-git clone git@hf.co:ogrenenmakine/Policy-Gradient-Noise-Mask
+git clone git@hf.co:convergedmachine/Policy-Gradient-Noise-Mask
 ```
 
 ### Training
